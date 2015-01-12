@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#pragma warning(disable:4996)
 #define ERROR_POP -9999	
 #define END -99999	
 
