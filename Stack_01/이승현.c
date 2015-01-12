@@ -32,9 +32,12 @@ int main(){
 
 	}
 
+
+	printf("\nPOP\n");
+	printf("==================");
+
 	while(1){
 
-		printf("\n\nPOP");
 		data = pop(&Stack);
 		printf("\n%d POP!",data);
 
@@ -43,6 +46,7 @@ int main(){
 
 	}
 
+	getchar();
 	getchar();
 	return 0;
 }
