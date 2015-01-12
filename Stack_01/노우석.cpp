@@ -1,64 +1,49 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_SIZE 8
 
 int top= 0;
-
-void push(int arr[],int data);
-int pop(int arr[]);
+int *stack;
+void push(int data);
+int pop();
 int isEmpty();
 int isFull();
 
 int main(){
-	int arr[MAX_SIZE]={0};
+
 	int data,i;
 	
-	while(1){
-		if(top == MAX_SIZE) {
-			printf("%d\n",pop(arr));
-		}
-		else{
-			scanf("%d", &data);
-			push(arr,data);
-			for(i=0;i<MAX_SIZE;i++) printf("%d  ",arr[i]);
-			printf("\n");
-		}
-	}
+	stack=(*int) malloc(sizeof(int)*MAX_SIZE);
+
 	
 }
 
-void push(int arr[],int data){
+void push(int data){
 
-	int std;
-	std = isFull();
-	if(std) return;
+	if(isFull()) return;
 	else {
-		arr[top] = data;
-		top++;
+		*(stack+top++) = data;
 	}
 }
 
-int pop(int arr[]){
+int pop(){
 
-	int std,temp;
-	std = isEmpty();
-
-	if(std){
+	if(isEmpty){
 		return 0;
 	}
 	else{
-		temp = arr[top - 1];
-		top--;
+		temp = stack[(top--) - 1];
 		return temp;
 	}
 }
 
 int isEmpty(){
-	if(top == 0) return 1;		//ºñ¾îÀÖÀ½
+	if(top == 0) return 1;		
 	else return 0;
 }
 
 int isFull(){
-	if(top == MAX_SIZE) return 1; //²ËÂ÷ÀÖÀ½
+	if(top == MAX_SIZE) realloc(stack, sizeof(int)*MAX_SIZE*2);
 	else return 0;
 }
