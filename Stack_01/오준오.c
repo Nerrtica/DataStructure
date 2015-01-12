@@ -18,7 +18,7 @@ int isEmpty(int *stack1){
 int isFull(int *stack1){
 	int i;
 
-	if(top==11){
+	if(top==10){
 		printf("stack is full.\n");
 		return 1;
 	}
@@ -37,13 +37,17 @@ void push(int data){
 	}
 }
 
-void pop(){
+int pop(){
+	int tmp;
 	if(isEmpty(stack)==1){
 		printf("cannot pop,\n");
 	}
 	else{
 		top--;
+		tmp=stack[top];
 		stack[top]=NULL;
+		return tmp;
+		
 	}
 }
 
