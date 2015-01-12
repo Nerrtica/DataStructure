@@ -1,14 +1,17 @@
 #include<stdio.h>
 #pragma warning(disable:4996)
 #define MAX_SIZE 100
+
 typedef struct _STACK{
 	int stack[MAX_SIZE];
 	int top;
 }STACK;
+
 int isEmpty(STACK *sta);
 int isFull(STACK *sta);
 void Push(STACK *sta);
-void POP(STACK *sta);
+int POP(STACK *sta);
+
 int main(void){
 	STACK st, *sta;
 	int i;
@@ -53,7 +56,7 @@ void Push(STACK *sta){
 		(sta->top)+=1;
 	}
 }
-void POP(STACK *sta){
+int POP(STACK *sta){
 	if(isEmpty(sta)){
 		printf("cant\n");
 	}
@@ -61,4 +64,5 @@ void POP(STACK *sta){
 		printf("data output : %d\n", sta->stack[sta->top - 1]);
 		(sta->top)-=1;
 	}
+	return sta->stack[sta->top];
 }
