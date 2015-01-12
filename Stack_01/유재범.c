@@ -39,7 +39,7 @@ int isEmpty(STACK *sta){
 		return 0;
 }
 int isFull(STACK *sta){
-	if((sta->top) == MAX_SIZE - 1)
+	if((sta->top) == MAX_SIZE)
 		return 1;
 	else
 		return 0;
