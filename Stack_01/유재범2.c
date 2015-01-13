@@ -46,7 +46,7 @@ int isEmpty(STACK *sta){
 int isFull(STACK *sta){
 	if((sta->top) == mem){
 		mem *= 2;
-		realloc(sta->stack, (sizeof(int) * mem));
+		sta->stack = (int *)realloc(sta->stack, (sizeof(int) * mem));
 		return 1;
 	}
 	else
