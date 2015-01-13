@@ -1,90 +1,82 @@
 #include <stdio.h>
-#pragma warning(disable:4996)
 #include <stdlib.h>
-//#define MAX_SIZE 5
+#pragma warning(disable:4996)
+#define RING 3
 
-typedef struct _QUEUE{
-	int *queue;
-	int front;
-	int rear;
-}QUEUE;
+typedef struct _COLUMN{
+	int ring[RING];
+	int top;
+}COLUMN;
 
-int isEmpty(QUEUE *qu);
-int isFull(QUEUE *qu);
-void Push(QUEUE *qu);
-int POP(QUEUE *qu);
-
-int qSize = 4;
+void Hanoi(COLUMN *cFirst, COLUMN *cSecond, COLUMN *cThird, int ring);
+int isEmpty(COLUMN *sta);
+int isFull(COLUMN *sta);
+void Push(COLUMN *sta, int a);
+int POP(COLUMN *sta);
 
 int main(void){
-	QUEUE q, *qu;
-	int i = 0;
-	qu = &q;
-	qu->front = qSize - 1;
-	qu->rear = qSize - 1;
-	qu->queue = (int *)malloc(sizeof(int) * qSize);
-	while(1){
-		printf("select(1 : push, 2 : pop) : ");
-		scanf("%d", &i);
-		if(i == 1)
-			Push(qu);
-		else if(i == 2)
-			POP(qu);
-		//return value -1 : fail to pop
-		else
-			break;
-	}
-	free(qu->queue);
+	COLUMN c1, c2, c3, *cFirst, *cSecond, *cThird;
+	int i, ring = RING;
+
+	cFirst = &c1;
+	cFirst->top = RING;
+	cSecond = &c2;
+	cSecond->top = 0;
+	cThird = &c3;
+	cThird->top = 0;
+
+	for(i = 0; i < RING; i++)
+		cFirst->ring[i] = RING - i;
+
+	Hanoi(cFirst, cSecond, cThird, ring);
+
 	return 0;
 }
 
-int isEmpty(QUEUE *qu){
-	if(qu->front == qu->rear)
-		return 1;
-	else
-		return 0;
-}
+void Hanoi(COLUMN *cFirst, COLUMN *cSecond, COLUMN *cThird, int ring){
+	int save = 0;
 
-int isFull(QUEUE *qu){
-	int i;
-	if(qu->rear == qu->front){
-		qSize *= 2;
-		realloc(qu->queue, sizeof(int) * qSize);
-
-		for(i = qu->front; i < (qSize / 2); i++){
-			qu->queue[i + (qSize / 2)] = qu->queue[i];
-		}
-
-		qu->front = qSize - 1;
-		return 1;
-	}
-	else
-		return 0;
-}
-
-void Push(QUEUE *qu){
-	qu->rear = (qu->rear + 1) % qSize;
-	if(qu->front == qu->rear){
-		if(isFull(qu)){
-			printf("realloc success\n");
-		}
-	}
-	
-	printf("input size : ");
-	scanf("%d", &qu->queue[qu->rear]);
-	
-}
-
-int POP(QUEUE *qu){
-	if(qu->front == qu->rear){
-		if(isEmpty){
-			printf("have no data\n");
-			return -1;
-		}
+	if(ring == 1){
+		Push(cSecond, POP(cFirst));
 	}
 	else{
-		qu->front = (qu->front + 1) % qSize;
-		printf("pop data : %d\n", qu->queue[qu->front]);
-		return qu->queue[qu->front];
+		Hanoi(cFirst, cThird, cSecond, ring - 1);
+		Push(cSecond, POP(cFirst));
+		Hanoi(cThird, cSecond, cFirst, ring - 1);
 	}
+}
+
+int isEmpty(COLUMN *sta){
+	if((sta->top) == 0)
+		return 1;
+	else
+		return 0;
+}
+
+int isFull(COLUMN *sta){
+	if((sta->top) == RING)
+		return 1;
+	else
+		return 0;
+}
+
+void Push(COLUMN *sta, int a){
+	if(isFull(sta)){
+		printf("cant\n");
+	}
+	else{
+		sta->ring[sta->top] = a;
+		(sta->top) += 1;
+	}
+}
+
+int POP(COLUMN *sta){
+	if(isEmpty(sta)){
+		printf("cant\n");
+	}
+	else{
+		printf("data output : %d\n", sta->ring[sta->top - 1]);
+		(sta->top) -= 1;
+	}
+	return sta->ring[sta->top];
 }
