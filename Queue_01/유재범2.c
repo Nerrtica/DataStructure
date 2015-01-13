@@ -55,7 +55,7 @@ int isFull(QUEUE *qu){
 			qu->queue[i + (qSize / 2)] = qu->queue[i];
 		}
 
-		qu->front += (qSize / 2);
+		qu->front = qSize - 1;
 		return 1;
 	}
 	else
@@ -65,7 +65,7 @@ int isFull(QUEUE *qu){
 void Push(QUEUE *qu){
 	qu->rear = (qu->rear + 1) % qSize;
 	if(qu->front == qu->rear){
-		if(isFull){
+		if(isFull(qu)){
 			printf("realloc success\n");
 		}
 	}
