@@ -10,8 +10,8 @@ typedef struct _node
 	struct _node *next ;
 }NODE ;
 
-void addNodeLast(NODE *head);
-void addNodePlace(NODE *head, int order);
+void addNodeLast(NODE *head, int value);
+void addNodePlace(NODE *head, int order, int value);
 void putData(NODE *head, int order, int value);
 int searchValue(NODE *head, int value);
 int searchNode(NODE *head, int order);
@@ -31,27 +31,27 @@ void main()
 	{
 		do
 		{
-			printf("0 : 값을 넣자 ,1 : 끝에 노드 추가, 2 : 특정 위치 노드 추가, 3 : 특정 값 삭제\n4 : 특정 노드 삭제, 5 : 값 찾기, 6 : 노드의 내용 찾기, 7 : 출력, 8 : 종료\n");
+			printf("1 : 끝에 노드 추가, 2 : 특정 위치 노드 추가, 3 : 특정 값 삭제\n4 : 특정 노드 삭제, 5 : 값 찾기, 6 : 노드의 내용 찾기, 7 : 출력, 8 : 종료\n");
 			printf("할 짓 설정 : ") ;
 			scanf("%d",&userSelect);
-		}while(!(userSelect >= 0 && userSelect <= 8));
+		}while(!(userSelect > 0 && userSelect <= 8));
 
 		switch(userSelect)
 		{
 		case 0:
+			putData(head, order, value);
+			break ;
+		case 1:
+			printf("뭐를 넣을래? : ");
+			scanf("%d",&value);
+			addNodeLast(head, value);
+			break ;
+		case 2:
 			printf("몇 번째에 넣을래? : ");
 			scanf("%d",&order);
 			printf("뭐를 넣을래? : ");
 			scanf("%d",&value);
-			putData(head, order, value);
-			break ;
-		case 1:
-			addNodeLast(head);
-			break ;
-		case 2:
-			printf("몇 번째 추가? : ");
-			scanf("%d",&order);
-			addNodePlace(head, order);
+			addNodePlace(head, order, value);
 			break ;
 		case 3:
 			printf("어떤 값을 지울래? : ");
@@ -86,7 +86,7 @@ void main()
 	return ;
 }
 
-void addNodeLast(NODE *head) 
+void addNodeLast(NODE *head, int value) 
 {
 	NODE *node ;
 
@@ -95,13 +95,13 @@ void addNodeLast(NODE *head)
 		node = node->next ;
 
 	node->next = (NODE *)malloc(sizeof(NODE));
-	node->next->data = 0 ;
+	node->next->data = value ;
 	node->next->next = NULL ;
 	
 	return ;
 }
 
-void addNodePlace(NODE *head, int order) 
+void addNodePlace(NODE *head, int order, int value) 
 {
 	NODE *node, *temp_node ;
 	int i ;
@@ -113,7 +113,7 @@ void addNodePlace(NODE *head, int order)
 	
 	temp_node = (NODE *)malloc(sizeof(NODE)) ;
 	temp_node->next = node->next ;
-	temp_node->data = 0 ;
+	temp_node->data = value ;
 	node->next = temp_node ;
 
 	return ;
@@ -178,7 +178,7 @@ void deleteValue(NODE *head, int value)
 	}
 	order = searchValue(head, value);
 
-	for(i = 0 ; i <= order ; i++)//
+	for(i = 0 ; i < order ; i++)//
 		node =node->next ;
 	
 	node->data = 0 ;
