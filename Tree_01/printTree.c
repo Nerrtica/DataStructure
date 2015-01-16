@@ -1,10 +1,15 @@
-int printTree_ (tree * root, int isLeft, int offset, int depth, char str[20][255]) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+
+int printTree_ (TREE * root, int isLeft, int offset, int depth, char str[20][255]) {
 	char b[20];
 	int left, right, width = 5;
 	int i;
 
 	if (root == NULL) { return 0; }
-	sprintf(b, "( %c )", root->value);
+	sprintf(b, "( %c )", root->data);
 
 	left = printTree_(root->leftChild, 1, offset, depth + 1, str);
 	right = printTree_(root->rightChild, 0, offset + left + width, depth + 1, str);
@@ -29,7 +34,7 @@ int printTree_ (tree * root, int isLeft, int offset, int depth, char str[20][255
 }
 
 /* print out the shape of a tree */
-void printTree (tree * root) {
+void printTree (TREE * root) {
 	char str[20][255];
 	int  i;
 	for (i = 0; i < 20; i++) {
