@@ -265,7 +265,7 @@ void insert(NODE *parent, int value)
 void removeData(NODE *parent, int value)
 {
 	int degree = 0, i , count = 0;
-	NODE *node, *temp, *root;
+	NODE *node, *temp, *root, *tempLeft;
 
 	if(isFindValue(parent, value) == 0)
 	{
@@ -277,10 +277,6 @@ void removeData(NODE *parent, int value)
 		node = parent->left;
 	else if(value > parent->data)
 		node = parent->right;
-//	else //error control용 (맨 첫 노드 삭제시)
-//	{
-//
-//	}
 
 	if(value < node->data)
 		removeData(node, value);
@@ -331,6 +327,11 @@ void removeData(NODE *parent, int value)
 				count++;
 			}
 
+			if(temp->left == NULL)// 2 - 1 error control
+				tempLeft = NULL;
+			else
+				tempLeft = temp->left;
+
 			temp->left = node->left;
 			if(count == 0)
 				temp->left = NULL;
@@ -342,9 +343,8 @@ void removeData(NODE *parent, int value)
 
 			for(i = 0 ; i < count - 1 ; i++)
 				temp = temp->right;
-	
-			if(count != 0)
-				temp->right = NULL;
+
+				temp->right = tempLeft;
 			break;
 		}
 	}
