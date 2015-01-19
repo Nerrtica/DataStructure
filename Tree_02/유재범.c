@@ -8,10 +8,13 @@ typedef struct TRYEE{
 	struct TRYEE *leftChild;
 	struct TRYEE *rightChild;
 }TREE;
-
+TREE *temp = NULL;
 void MakeTree(TREE **point);
 void Goto(TREE **point, TREE *node);
 void AddChild(TREE **child, int input);
+int DeleteContainer(TREE **point, int value);
+int FindData(TREE *point);
+int SearchValue(TREE **point, int value);
 
 int main(void){
 	TREE *point;
@@ -26,6 +29,7 @@ int main(void){
 		scanf("%d", &value);
 	
 		SearchValue(&point, value);
+		temp = NULL;
 	}
 
 	free(point);
@@ -34,7 +38,7 @@ int main(void){
 
 int SearchValue(TREE **point, int value){
 	TREE *node = NULL;
-	int select = 0;
+	int select = 0, i = 0;
 
 	if((*point)->data > value){
 		node = (*point)->leftChild;
@@ -50,8 +54,8 @@ int SearchValue(TREE **point, int value){
 			return 1;
 		}
 		else{
-
-			return 1;
+			DeleteContainer(point, value);
+			return -1;
 		}
 	}
 
@@ -60,7 +64,7 @@ int SearchValue(TREE **point, int value){
 		scanf("%d", &select);
 		if(select == 0){
 			printf("\n");
-			return 1;
+			return 0;
 		}
 		else{
 			AddChild(&(*point)->leftChild, value);
@@ -68,21 +72,55 @@ int SearchValue(TREE **point, int value){
 		}
 	}
 	else{
-		SearchValue(&node, value);
+		i = SearchValue(&node, value);
+		if(node->data < 0){
+			if(node->leftChild != NULL){
+				node->leftChild = NULL;
+			}
+			(*point)->leftChild = node->leftChild;
+			if(node->rightChild != NULL){
+				node->rightChild = NULL;
+			}
+			(*point)->rightChild = node->rightChild;
+		}
+		else{
+			if((*point)->rightChild->data < 0){
+				(*point)->rightChild = node;
+			}
+			else if((*point)->leftChild->data < 0){
+				(*point)->leftChild = node;
+			}
+		}
 	}
 	
 	return 0;
 }
-int DeleteOneChildContainer(TREE **point, int value){
-	if((*point)->data > value){
-
+int DeleteContainer(TREE **point, int value){
+	
+	if((*point)->leftChild == NULL && (*point)->rightChild == NULL){
+		free(*point);
 	}
-	else if((*point)->data < value){
-
+	else if((*point)->leftChild == NULL){
+		temp = *point;
+		(*point) = (*point)->rightChild;
+		free(temp);
+		temp = NULL;
 	}
-	else if((*point)->data == value){
-
+	else if((*point)->rightChild == NULL){
+		temp = *point;
+		*point = (*point)->leftChild;
+		free(temp);
+		temp = NULL;
 	}
+	else{
+		temp = (*point)->leftChild;
+		while(temp->rightChild != NULL){
+			temp = temp->rightChild;
+		}
+		(*point)->data = temp->data;
+		DeleteContainer(&temp, 0);
+	}
+	return (*point)->data;
 }
 int FindData(TREE *point){
 	TREE *node = NULL;
@@ -94,6 +132,7 @@ int FindData(TREE *point){
 		node = point->leftChild;
 		FindData(node);
 	}
+	return -1;
 }
 
 void MakeTree(TREE **point){
