@@ -21,7 +21,8 @@ int isFindValue(NODE *parent, int value);
 void printSearch(int isFind);
 void insert(NODE *parent, int value);
 void removeData(NODE *parent, int value);
-NODE *removeJudge(NODE *root, int value);
+//NODE *removeJudge(NODE *root, int value);
+void removeJudge(NODE *root, int value);
 void printOrder(int inOrderArray[], int preOrderArray[],NODE *root);
 int userSelect();
 int valueSelect();
@@ -53,7 +54,8 @@ void main()
 			break;
 		case 2:
 			value = valueSelect();
-			root = removeJudge(root, value);
+//			root = removeJudge(root, value);
+			removeJudge(root, value);
 			break;
 		case 3:
 			value = valueSelect();
@@ -261,7 +263,7 @@ void insert(NODE *parent, int value)
 
 	return;
 }
-
+/*
 void removeData(NODE *parent, int value)
 {
 	int degree = 0, i , count = 0;
@@ -339,7 +341,7 @@ void removeData(NODE *parent, int value)
 			parent->left = temp;
 
 			temp = node->left;
-			free(node);
+			free(node); 
 
 			for(i = 0 ; i < count - 1 ; i++)
 				temp = temp->right;
@@ -413,6 +415,131 @@ NODE *removeJudge(NODE *root, int value)
 	{
 		removeData(root, value);
 		return root;
+	}
+}
+*/
+
+void removeData(NODE *parent, int value)
+{
+	int degree, tempValue;
+	NODE *node, *temp, *root;
+
+	if(isFindValue(parent, value) == 0)
+	{
+		printf("Not Here! \n");
+		return;
+	}
+
+	if(value < parent->data)
+		node = parent->left;
+	else if(value > parent->data)
+		node = parent->right;
+
+	if(value < node->data)
+		removeData(node, value);
+	else if(value > node->data)
+		removeData(node, value);
+	else//°°À» ¶§
+	{
+		degree = 0;
+		if(node->left != NULL)
+			degree++;
+		if(node->right != NULL)
+			degree++;
+
+		switch(degree)
+		{
+		case 0:
+			free(node);
+			if(node == parent->left)
+				parent->left = NULL;
+			else if(node == parent->right)
+				parent->right = NULL;
+			break;
+		case 1:
+			if(node == parent->left)
+			{
+				if(node->left != NULL)
+					parent->left = node->left;
+				else if(node->right != NULL)
+					parent->left = node->right;
+				
+				free(node);
+			}
+			else if(node == parent->right)
+			{
+				if(node->left != NULL)
+					parent->right = node->left;
+				else if(node->right != NULL)
+					parent->right = node->right;
+				
+				free(node);
+			}
+			break;
+		case 2:
+			temp = node->left;
+			while(temp->right != NULL)
+				temp = temp->right;
+			
+			tempValue = temp->data;
+			
+			removeData(node, tempValue);
+			node->data = tempValue;
+			break;
+		}
+	}
+	return;
+}
+
+void removeJudge(NODE *root, int value)
+{
+	int degree, i, tempValue;
+	NODE *node, *temp;
+
+	if(root->data == value)
+	{
+		degree = 0;
+		node = root;
+		if(node->left != NULL)
+			degree++;
+		if(node->right != NULL)
+			degree++;
+
+		switch(degree)
+		{
+		case 0:
+			free(node);
+			return;
+			break;
+		case 1:
+			if(root->left != NULL)
+			{
+				root = root->left;
+				free(node);
+			}
+			else if(root->right != NULL)
+			{
+				root = root->right;
+				free(node);
+			}
+			break;
+		case 2:
+			temp = node->left;
+			while(temp->right != NULL)
+				temp = temp->right;
+			
+			tempValue = temp->data;
+			
+			removeData(root, tempValue);
+			root->data = tempValue;
+			break;
+		}
+		return;
+	}
+	else
+	{
+		removeData(root, value);
+		return;
 	}
 }
 
