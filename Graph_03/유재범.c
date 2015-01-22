@@ -29,15 +29,20 @@ void Dijkstra(int graph[SIZE][SIZE], int cost[SIZE], int parents[SIZE],int end){
 	int i = 0, j = 0, save = 0;
 	int node[SIZE] = {0, };
 
-	for(i = 0; i < end - 1; i++){
+	for(i = 0; i < SIZE - 1; i++){
 		for(j = 0; j < SIZE; j++){
 			save = graph[i][j] + cost[i];
-			if(graph[i][j] > 0 || cost[j] > save){
+			if(cost[j] == 0 && graph[i][j] > 0){
+				parents[j] = i + 1;
+				cost[j] = save;
+			}
+			else if((graph[i][j] > 0) && (cost[j] > save)){// cost[j] > save
 				parents[j] = i + 1;
 				cost[j] = save;
 			}
 		}
 	}
+
 	printf("최소 코스트 : %d\n", cost[end - 1]);
 	node[0] = end;
 	j = end;
